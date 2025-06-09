@@ -1,5 +1,5 @@
 {
-    "name": "faonni/module-price",
+    "name": "studioraz/magento2-price-rounding",
     "description": "Rounding Price to Prettier Value for Multi-Currency Stores.",
     "type": "magento2-module",
     "version": "2.4.3",
