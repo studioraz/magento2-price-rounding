@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright © 2025 Studio Raz. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+/** @var \Faonni\Price\Block\ConfigProvider $block */
+?>
+<script>
+    window.srPricePrecisionConfig = <?= /* @noEscape */ json_encode($block->getJsConfig()); ?>;
+</script>
