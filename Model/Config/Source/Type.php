@@ -20,6 +20,7 @@ class Type implements ArrayInterface
     public function toOptionArray()
     {
         return [
+            ['value' => 'round',  'label' => __('Round')],
             ['value' => 'ceil',  'label' => __('Round fractions up')],
             ['value' => 'floor', 'label' => __('Round fractions down')],
             ['value' => 'swedish_ceil',  'label' => __('Swedish Round up')],

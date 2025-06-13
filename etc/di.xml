@@ -21,6 +21,7 @@
     <type name="Faonni\Price\Model\Calculator\RoundProcessorPoolInterface">
         <arguments>
             <argument name="processors" xsi:type="array">
+                <item name="round" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Base\RoundProcessor\Proxy</item>
                 <item name="ceil" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Base\CeilProcessor\Proxy</item>
                 <item name="floor" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Base\FloorProcessor\Proxy</item>
                 <item name="swedish_ceil" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Swedish\CeilProcessor\Proxy</item>
