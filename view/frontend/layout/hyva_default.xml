@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2026 Studio Raz. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="head.additional">
+            <block name="sr.price.rounding.hyva.format.price.extend"
+                   class="Faonni\Price\Block\ConfigProvider"
+                   template="Faonni_Price::hyva/page/js/hyva-format-price.phtml"
+                   after="head.hyva-scripts"/>
+        </referenceContainer>
+    </body>
+</page>
+

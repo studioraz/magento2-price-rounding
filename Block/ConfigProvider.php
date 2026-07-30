@@ -25,4 +25,14 @@ class ConfigProvider extends Template
             'enabled' => ($this->helper->isEnabled() == true && $this->helper->getPrecision() <= 0) ? true : false,
         ];
     }
+
+    public function getHyvaJsConfig(): array
+    {
+        return [
+            'enabled'         => $this->helper->isEnabled(),
+            'showDecimalZero' => $this->helper->isShowDecimalZero(),
+            'replaceZeroPrice'=> $this->helper->isReplaceZeroPrice(),
+            'zeroPriceText'   => $this->helper->getZeroPriceText(),
+        ];
+    }
 }

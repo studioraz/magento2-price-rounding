@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © 2025 Studio Raz. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Faonni\Price\Block\ConfigProvider $block */
+?>
+<script>
+    'use strict';
+
+    (() => {
+        window.srPriceRoundingConfig = <?= /* @noEscape */ json_encode($block->getHyvaJsConfig()); ?>;
+
+        const config = window.srPriceRoundingConfig;
+
+        if (!config.enabled) {
+            return;
+        }
+
+        const origFormatPrice = hyva.formatPrice;
+
+        hyva.formatPrice = function (value, showSign, options = {}) {
+            // Replace zero price with custom text
+            if (config.replaceZeroPrice && parseFloat(value) === 0) {
+                return '<span class="price-free">' + config.zeroPriceText + '</span>';
+            }
+
+            const result = origFormatPrice.apply(this, arguments);
+
+            // Hide decimal zeros (.00) for whole-number prices
+            if (!config.showDecimalZero && parseFloat(value) % 1 === 0) {
+                return result.replace(/(\d+)\.00(\D*)$/, '$1$2');
+            }
+
+            return result;
+        };
+    })();
+</script>
+
