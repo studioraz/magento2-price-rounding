@@ -20,6 +20,9 @@
     <type name="Magento\Catalog\Pricing\Price\FinalPrice">
         <plugin name="faonni_price_final_price" type="Faonni\Price\Plugin\Catalog\Pricing\Price\FinalPricePlugin"/>
     </type>
+    <type name="Magento\Catalog\Pricing\Price\RegularPrice">
+        <plugin name="faonni_price_regular_price" type="Faonni\Price\Plugin\Catalog\Pricing\Price\RegularPricePlugin"/>
+    </type>
     <!-- round processor pool -->
     <type name="Faonni\Price\Model\Calculator\RoundProcessorPoolInterface">
         <arguments>

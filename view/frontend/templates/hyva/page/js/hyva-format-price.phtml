@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2025 Studio Raz. All rights reserved.
+ * Copyright © 2026 Studio Raz. All rights reserved.
  * See LICENSE.txt for license details.
  */
 declare(strict_types=1);
@@ -12,30 +12,101 @@ declare(strict_types=1);
 
     (() => {
         window.srPriceRoundingConfig = <?= /* @noEscape */ json_encode($block->getHyvaJsConfig()); ?>;
-
         const config = window.srPriceRoundingConfig;
 
-        if (!config.enabled) {
+        if (!config || !config.enabled) {
             return;
         }
 
-        const origFormatPrice = hyva.formatPrice;
+        /**
+         * Replicates Faonni\Price\Model\Calculator in JS
+         */
+        function roundPrice(val) {
+            let price = parseFloat(val);
+            if (isNaN(price) || price === 0) {
+                return 0;
+            }
 
-        hyva.formatPrice = function (value, showSign, options = {}) {
-            // Replace zero price with custom text
-            if (config.replaceZeroPrice && parseFloat(value) === 0) {
+            const precision = config.precision !== undefined ? parseInt(config.precision, 10) : 0;
+            const factor = Math.pow(10, Math.abs(precision));
+            const type = config.type || 'floor';
+
+            switch (type) {
+                case 'ceil':
+                case 'simple_ceil':
+                case 'excel_ceil':
+                case 'swedish_ceil':
+                    price = precision < 0
+                        ? Math.ceil(price / factor) * factor
+                        : Math.ceil(price * factor) / factor;
+                    break;
+                case 'floor':
+                case 'simple_floor':
+                case 'excel_floor':
+                case 'swedish_floor':
+                    price = precision < 0
+                        ? Math.floor(price / factor) * factor
+                        : Math.floor(price * factor) / factor;
+                    break;
+                case 'swedish_round':
+                    const fraction = config.swedishFraction || 0.05;
+                    price = Math.round(price / fraction) * fraction;
+                    break;
+                case 'excel_round':
+                case 'round':
+                default:
+                    price = precision < 0
+                        ? Math.round(price / factor) * factor
+                        : Math.round(price * factor) / factor;
+                    break;
+            }
+
+            if (config.subtract && price > parseFloat(config.amount || 0)) {
+                price = price - parseFloat(config.amount);
+            }
+
+            return Math.max(0, price);
+        }
+
+        function overrideHyvaFormatPrice() {
+            if (typeof window.hyva === 'undefined' || typeof window.hyva.formatPrice !== 'function') {
+            return;
+        }
+
+            if (window.hyva.formatPrice._isSrRounding) {
+                return;
+            }
+
+            const originalFormatPrice = window.hyva.formatPrice;
+
+            window.hyva.formatPrice = function (value, showSign, options) {
+                let numericVal = parseFloat(value);
+
+                if (config.replaceZeroPrice && (!numericVal || numericVal === 0)) {
                 return '<span class="price-free">' + config.zeroPriceText + '</span>';
             }
 
-            const result = origFormatPrice.apply(this, arguments);
+                if (!isNaN(numericVal)) {
+                    value = roundPrice(numericVal);
+                }
 
-            // Hide decimal zeros (.00) for whole-number prices
-            if (!config.showDecimalZero && parseFloat(value) % 1 === 0) {
-                return result.replace(/(\d+)\.00(\D*)$/, '$1$2');
+                let result = originalFormatPrice.call(this, value, showSign, options);
+
+                if (!config.showDecimalZero) {
+                    result = result.replace(/([0-9]+)[\.,]0+(?=[^\d]|$)/g, '$1');
             }
 
             return result;
         };
+
+            // Mark it as wrapped so events don't trigger a double-wrap recursion crash
+            window.hyva.formatPrice._isSrRounding = true;
+        }
+
+        overrideHyvaFormatPrice();
+
+        // Ensure we catch it even if Hyvä initializes late (e.g. Alpine init or cart loading)
+        document.addEventListener('DOMContentLoaded', overrideHyvaFormatPrice);
+        document.addEventListener('alpine:init', overrideHyvaFormatPrice);
     })();
 </script>
-
