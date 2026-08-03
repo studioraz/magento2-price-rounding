@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Checkout config provider (frontend area) -->
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="faonni_price_rounding" xsi:type="object">Faonni\Price\Model\Checkout\PriceRoundingConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Fix price format pattern to include currency symbol when missing -->
+    <type name="Magento\Framework\Locale\Format">
+        <plugin name="faonni_price_format" type="Faonni\Price\Model\Locale\PriceFormatPlugin" sortOrder="20"/>
+    </type>
+</config>

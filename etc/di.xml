@@ -10,6 +10,14 @@
     <!-- preference -->
     <preference for="Faonni\Price\Model\Calculator\RoundProcessorPoolInterface" type="Faonni\Price\Model\Calculator\RoundProcessorPool"/>
     <preference for="Faonni\Price\Model\CalculatorInterface" type="Faonni\Price\Model\Calculator"/>
+    <!-- checkout config provider -->
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="faonni_price_rounding" xsi:type="object">Faonni\Price\Model\Checkout\PriceRoundingConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <!-- plugin -->
     <type name="Magento\Directory\Model\Currency">
         <plugin name="faonni_price" type="Faonni\Price\Plugin\Directory\Model\Currency"/>
@@ -36,7 +44,7 @@
                 <item name="excel_round" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Excel\RoundProcessor\Proxy</item>
                 <item name="excel_floor" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Excel\FloorProcessor\Proxy</item>
                 <item name="simple_ceil" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Simple\CeilProcessor\Proxy</item>
-                <item name="simple_floor" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Simple\CeilProcessor\Proxy</item>
+                <item name="simple_floor" xsi:type="object">Faonni\Price\Model\Calculator\RoundProcessor\Simple\FloorProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>
