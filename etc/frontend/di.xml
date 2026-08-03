@@ -13,4 +13,8 @@
     <type name="Magento\Framework\Locale\Format">
         <plugin name="faonni_price_format" type="Faonni\Price\Model\Locale\PriceFormatPlugin" sortOrder="20"/>
     </type>
+    <!-- Debug + round minicart item prices -->
+    <type name="Magento\Checkout\CustomerData\ItemInterface">
+        <plugin name="faonni_price_minicart_item" type="Faonni\Price\Plugin\Checkout\CustomerData\ItemPlugin" sortOrder="200"/>
+    </type>
 </config>
