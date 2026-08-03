@@ -49,15 +49,16 @@ class Calculator implements CalculatorInterface
      */
     public function calculate($price)
     {
-        return $this->format(max(0, $this->subtract($this->round($price))));
+        if ((float)$price === 0.0) {
+            return 0.0;
     }
 
-    /**
-     * Retrieve the rounded price
-     *
-     * @param float $price
-     * @return float
-     */
+        $roundedPrice = $this->round((float)$price);
+        $finalPrice = $this->subtract($roundedPrice);
+
+        return $this->format(max(0, $finalPrice));
+    }
+
     private function round($price)
     {
         $processor = $this->roundProcessorPool->getProcessor(
@@ -85,7 +86,7 @@ class Calculator implements CalculatorInterface
      */
     private function subtract($price)
     {
-        if ($this->helper->isSubtract()) {
+        if ($this->helper->isSubtract() && $price > $this->helper->getAmount()) {
             $price = $price - $this->helper->getAmount();
         }
         return $price;

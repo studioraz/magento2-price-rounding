@@ -29,10 +29,15 @@ class ConfigProvider extends Template
     public function getHyvaJsConfig(): array
     {
         return [
-            'enabled'         => $this->helper->isEnabled(),
-            'showDecimalZero' => $this->helper->isShowDecimalZero(),
-            'replaceZeroPrice'=> $this->helper->isReplaceZeroPrice(),
-            'zeroPriceText'   => $this->helper->getZeroPriceText(),
+            'enabled'          => $this->helper->isEnabled(),
+            'type'             => $this->helper->getRoundType(),
+            'precision'        => $this->helper->getPrecision(),
+            'swedishFraction'  => $this->helper->getSwedishFraction(),
+            'subtract'         => $this->helper->isSubtract(),
+            'amount'           => $this->helper->getAmount(),
+            'showDecimalZero'  => $this->helper->isShowDecimalZero(),
+            'replaceZeroPrice' => $this->helper->isReplaceZeroPrice(),
+            'zeroPriceText'    => $this->helper->getZeroPriceText(),
         ];
     }
 }
