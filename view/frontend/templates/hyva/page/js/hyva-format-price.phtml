@@ -12,6 +12,7 @@ declare(strict_types=1);
 
     (() => {
         window.srPriceRoundingConfig = <?= /* @noEscape */ json_encode($block->getHyvaJsConfig()); ?>;
+
         const config = window.srPriceRoundingConfig;
 
         if (!config || !config.enabled) {
@@ -110,3 +111,4 @@ declare(strict_types=1);
         document.addEventListener('alpine:init', overrideHyvaFormatPrice);
     })();
 </script>
+
