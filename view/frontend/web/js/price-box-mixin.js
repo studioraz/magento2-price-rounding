@@ -9,11 +9,15 @@ define([], function () {
                 var result = originalReloadPrice.call(this);
                 var priceEl = this.element.find('.price');
 
+                const decimalSymbol = (window.checkoutConfig && window.checkoutConfig.priceFormat
+                    && window.checkoutConfig.priceFormat.decimalSymbol) || '.';
+                const escapedSymbol = decimalSymbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const zeroDecimalPattern = new RegExp(`(\\d)${escapedSymbol}0+(\\D*)$`);
+
                 priceEl.each(function () {
                     const el = jQuery(this);
                     const originalText = el.text();
-                    // Remove .00 only if it appears after a number and no digits follow
-                    const updatedText = originalText.replace(/(\d+)\.00(?!\d)/g, '$1');
+                    const updatedText = originalText.replace(zeroDecimalPattern, '$1$2');
                     el.text(updatedText);
                 });
                 return result;

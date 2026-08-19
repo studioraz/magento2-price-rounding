@@ -15,7 +15,11 @@ define([], function () {
                 var result = String(superResult);
 
                 if (this._shouldHideDecimalZeros(config)) {
-                    result = result.replace(/([0-9]+)[\.,]0+(?=[^\d]|$)/g, '$1');
+                    var decimalSymbol = (window.checkoutConfig && window.checkoutConfig.priceFormat
+                        && window.checkoutConfig.priceFormat.decimalSymbol) || '.';
+                    var escapedSymbol = decimalSymbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    var zeroDecimalPattern = new RegExp('(\\d)' + escapedSymbol + '0+(\\D*)$');
+                    result = result.replace(zeroDecimalPattern, '$1$2');
                 }
 
                 return result;
