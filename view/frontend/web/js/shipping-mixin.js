@@ -38,7 +38,11 @@ define([], function () {
                 var result = this._super(price);
 
                 if (config && config.showDecimalZero === false) {
-                    return result.replace(/([0-9]+)[\.,]0+(?=[^\d]|$)/g, '$1');
+                    var decimalSymbol = (window.checkoutConfig && window.checkoutConfig.priceFormat
+                        && window.checkoutConfig.priceFormat.decimalSymbol) || '.';
+                    var escapedSymbol = decimalSymbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    var zeroDecimalPattern = new RegExp('(\\d)' + escapedSymbol + '0+(\\D*)$');
+                    return result.replace(zeroDecimalPattern, '$1$2');
                 }
 
                 return result;

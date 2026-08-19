@@ -94,7 +94,10 @@ declare(strict_types=1);
                 let result = originalFormatPrice.call(this, value, showSign, options);
 
                 if (!config.showDecimalZero) {
-                    result = result.replace(/([0-9]+)[\.,]0+(?=[^\d]|$)/g, '$1');
+                    const decimalSymbol = (window.hyva.priceFormat && window.hyva.priceFormat.decimalSymbol) || '.';
+                    const escapedSymbol = decimalSymbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const zeroDecimalPattern = new RegExp(`(\\d)${escapedSymbol}0+(\\D*)$`);
+                    result = result.replace(zeroDecimalPattern, '$1$2');
             }
 
             return result;
